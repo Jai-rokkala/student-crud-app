@@ -1,27 +1,64 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import type { Student } from "../types/Student"
 
 type Props = {
   onAddStudent: (student: Student) => void
+  onUpdateStudent: (student: Student) => void
+  editingStudent: Student | null
 }
 
-function StudentForm({ onAddStudent }: Props) {
+function StudentForm({ onAddStudent, onUpdateStudent, editingStudent }: Props) {
 
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
   const [age, setAge] = useState("")
+  const [error, setError] = useState("")
+
+  useEffect(() => {
+    if (editingStudent) {
+      setName(editingStudent.name)
+      setEmail(editingStudent.email)
+      setAge(String(editingStudent.age))
+    }
+  }, [editingStudent])
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
 
-    const newStudent: Student = {
-      id: Date.now(),
+    if (!name || !email || !age) {
+      setError("All fields are required")
+      return
+    }
+
+    if (!/^[A-Za-z\s]+$/.test(name)) {
+      setError("Name should contain only letters")
+      return
+    }
+
+    if (!email.includes("@")) {
+      setError("Invalid email address")
+      return
+    }
+
+    if (Number(age) <= 0) {
+      setError("Age must be greater than 0")
+      return
+    }
+
+    setError("")
+
+    const studentData: Student = {
+      id: editingStudent ? editingStudent.id : Date.now(),
       name,
       email,
       age: Number(age)
     }
 
-    onAddStudent(newStudent)
+    if (editingStudent) {
+      onUpdateStudent(studentData)
+    } else {
+      onAddStudent(studentData)
+    }
 
     setName("")
     setEmail("")
@@ -30,6 +67,7 @@ function StudentForm({ onAddStudent }: Props) {
 
   return (
     <form onSubmit={handleSubmit}>
+      {error && <p style={{ color: "red" }}>{error}</p>}
       <input
         placeholder="Name"
         value={name}
@@ -43,6 +81,7 @@ function StudentForm({ onAddStudent }: Props) {
       />
 
       <input
+        type="number"
         placeholder="Age"
         value={age}
         onChange={(e) => setAge(e.target.value)}

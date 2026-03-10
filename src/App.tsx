@@ -20,17 +20,45 @@ function App() {
     }
   ])
 
+  const [editingStudent, setEditingStudent] = useState<Student | null>(null)
+
   const addStudent = (student: Student) => {
     setStudents([...students, student])
+  }
+
+  const deleteStudent = (id: number) => {
+    const confirmDelete = window.confirm("Are you sure you want to delete this student?")
+
+    if (confirmDelete) {
+      setStudents(students.filter((student) => student.id !== id))
+    }
+  }
+
+  const updateStudent = (updatedStudent: Student) => {
+    setStudents(
+      students.map((student) =>
+        student.id === updatedStudent.id ? updatedStudent : student
+      )
+    )
+
+    setEditingStudent(null)
   }
 
   return (
     <div>
       <h1>Students CRUD Application</h1>
 
-      <StudentForm onAddStudent={addStudent} />
+      <StudentForm
+        onAddStudent={addStudent}
+        onUpdateStudent={updateStudent}
+        editingStudent={editingStudent}
+      />
 
-      <StudentTable students={students} />
+      <StudentTable
+        students={students}
+        onDeleteStudent={deleteStudent}
+        onEditStudent={setEditingStudent}
+      />
 
     </div>
   )

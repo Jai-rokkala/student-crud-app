@@ -2,9 +2,11 @@ import type { Student } from "../types/Student"
 
 type Props = {
   students: Student[]
+  onDeleteStudent: (id: number) => void
+  onEditStudent: (student: Student) => void
 }
 
-function StudentTable({ students }: Props) {
+function StudentTable({ students, onDeleteStudent, onEditStudent }: Props) {
 
   return (
     <table border={1}>
@@ -24,8 +26,8 @@ function StudentTable({ students }: Props) {
             <td>{student.email}</td>
             <td>{student.age}</td>
             <td>
-              <button>Edit</button>
-              <button>Delete</button>
+              <button onClick={() => onEditStudent(student)}>Edit</button>
+              <button onClick={() => onDeleteStudent(student.id)}>Delete</button>
             </td>
           </tr>
         ))}
