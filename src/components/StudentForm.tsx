@@ -66,28 +66,41 @@ function StudentForm({ onAddStudent, onUpdateStudent, editingStudent }: Props) {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      {error && <p style={{ color: "red" }}>{error}</p>}
+    <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+
+      {error && (
+        <p className="text-red-500 col-span-4">{error}</p>
+      )}
+
       <input
-        placeholder="Name"
+        className="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+        placeholder="Student Name"
         value={name}
         onChange={(e) => setName(e.target.value)}
       />
 
       <input
-        placeholder="Email"
+        className="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+        placeholder="Email Address"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
       />
 
       <input
         type="number"
+        className="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
         placeholder="Age"
         value={age}
         onChange={(e) => setAge(e.target.value)}
       />
 
-      <button type="submit">Add Student</button>
+      <button
+        type="submit"
+        className="bg-blue-500 text-white rounded px-4 py-2 hover:bg-blue-600 transition"
+      >
+        {editingStudent ? "Update" : "Add"}
+      </button>
+
     </form>
   )
 }

@@ -2,6 +2,7 @@ import { useState } from "react"
 import StudentTable from "./components/StudentTable"
 import StudentForm from "./components/StudentForm"
 import type { Student } from "./types/Student"
+import { exportStudentsToExcel } from "./utils/exportExcel"
 
 function App() {
 
@@ -45,20 +46,36 @@ function App() {
   }
 
   return (
-    <div>
-      <h1>Students CRUD Application</h1>
+    <div className="min-h-screen bg-gray-100 p-8">
 
-      <StudentForm
-        onAddStudent={addStudent}
-        onUpdateStudent={updateStudent}
-        editingStudent={editingStudent}
-      />
+      <div className="max-w-5xl mx-auto bg-white shadow-lg rounded-lg p-6">
 
-      <StudentTable
-        students={students}
-        onDeleteStudent={deleteStudent}
-        onEditStudent={setEditingStudent}
-      />
+        <h1 className="text-3xl font-bold text-center text-gray-800 mb-8">
+          Students Management System
+        </h1>
+
+        <StudentForm
+          onAddStudent={addStudent}
+          onUpdateStudent={updateStudent}
+          editingStudent={editingStudent}
+        />
+
+        <div className="flex justify-end mb-4">
+          <button
+            onClick={() => exportStudentsToExcel(students)}
+            className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition"
+          >
+            Export to Excel
+          </button>
+        </div>
+
+        <StudentTable
+          students={students}
+          onDeleteStudent={deleteStudent}
+          onEditStudent={setEditingStudent}
+        />
+
+      </div>
 
     </div>
   )
